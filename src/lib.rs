@@ -1,5 +1,12 @@
 #![no_std]
 
+#![cfg_attr(all(feature = "mesalock_sgx", not(target_env = "sgx")), no_std)]
+#![cfg_attr(all(target_env = "sgx", target_vendor = "mesalock"), feature(rustc_private))]
+
+#[cfg(all(feature = "mesalock_sgx", not(target_env = "sgx")))]
+#[macro_use]
+extern crate sgx_tstd as std;
+
 // This function is non-inline to prevent the optimizer from looking inside it.
 #[inline(never)]
 fn constant_time_ne(a: &[u8], b: &[u8]) -> u8 {
